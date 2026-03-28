@@ -1,0 +1,136 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Cadastro de Manutenção</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-900 min-h-screen p-6 text-slate-100">
+
+<main class="max-w-4xl mx-auto space-y-6">
+
+<!-- Cabeçalho -->
+<div class="bg-slate-800 rounded-xl p-6 border-l-8 border-indigo-600 shadow-xl">
+<a href="index.html"
+class="inline-block bg-red-600 hover:bg-red-700 transition-all duration-200 px-5 py-3 rounded-xl font-bold shadow-lg border border-red-400">
+🚨 Voltar para Checklist de Crise
+</a>
+<h1 class="text-3xl font-extrabold text-indigo-400">🛠️ Cadastro de Manutenção</h1>
+<p class="text-sm text-slate-400">Registro operacional · Texto para repasse</p>
+</div>
+
+<!-- Dados -->
+<div class="bg-slate-800 rounded-xl p-6 shadow-lg border-t-4 border-indigo-500">
+<h2 class="text-xl font-bold mb-4">Dados da Manutenção</h2>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+<input id="cliente" placeholder="Cliente" class="campo">
+
+<input id="idmanut" placeholder="ID" class="campo">
+
+<input id="hosts" placeholder="Hosts / Trigger" class="campo md:col-span-2">
+
+<div>
+<label class="label">Início</label>
+<input id="inicio" type="datetime-local" class="campo">
+</div>
+
+<div>
+<label class="label">Término</label>
+<input id="termino" type="datetime-local" class="campo">
+</div>
+
+<input id="alinhado" placeholder="Alinhado com" class="campo md:col-span-2">
+
+</div>
+</div>
+
+<!-- Texto Final -->
+<div class="bg-slate-800 rounded-xl p-6 shadow-lg border-t-4 border-emerald-500">
+<h2 class="text-xl font-bold mb-3">📄 Texto para Repasse</h2>
+
+<div id="textoFinal"
+class="campo text-sm font-mono bg-slate-700 rounded-lg p-4 whitespace-pre-line"></div>
+
+<button onclick="copiarTexto()"
+class="mt-3 w-full bg-emerald-600 hover:bg-emerald-700 p-3 rounded-xl font-bold">
+📋 Copiar texto (Teams)
+</button>
+
+</div>
+
+</main>
+
+<style>
+
+.campo{
+width:100%;
+min-height:42px;
+padding:0.5rem;
+border-radius:0.5rem;
+background:#334155;
+color:white;
+}
+
+.campo::placeholder{
+color:#94a3b8;
+}
+
+.label{
+font-size:0.75rem;
+color:#94a3b8;
+}
+
+</style>
+
+<script>
+
+const $ = id => document.getElementById(id);
+
+function data(valor){
+if(!valor) return '';
+
+const [d,h] = valor.split('T');
+const [y,m,day] = d.split('-');
+
+return `${day}/${m}/${y} ${h.substring(0,5)}hrs`;
+}
+
+function gerarTexto(){
+
+$('textoFinal').innerHTML =
+`<b>MANUTENÇÃO CADASTRADA</b><br><br>
+
+<b>Cliente:</b> ${$('cliente').value}<br>
+<b>ID:</b> ${$('idmanut').value}<br>
+<b>Hosts/Trigger:</b> ${$('hosts').value}<br>
+<b>Início/Término:</b> ${data($('inicio').value)} até ${data($('termino').value)}<br>
+<b>Alinhado com:</b> ${$('alinhado').value}`;
+
+}
+
+function copiarTexto(){
+
+const html = $('textoFinal').innerHTML;
+
+navigator.clipboard.write([
+new ClipboardItem({
+'text/html': new Blob([html], { type: 'text/html' }),
+'text/plain': new Blob([$ ('textoFinal').innerText], { type: 'text/plain' })
+})
+]);
+
+}
+
+document.querySelectorAll('input')
+.forEach(el => el.addEventListener('input', gerarTexto));
+
+</script>
+
+</body>
+</html>
+```
